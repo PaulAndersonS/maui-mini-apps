@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="SmartDailyTools.Views.AgePage"
+    x:Name="ThisPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:SmartDailyTools.ViewModels"
+    xmlns:dataGrid="clr-namespace:Syncfusion.Maui.DataGrid;assembly=Syncfusion.Maui.DataGrid"
+    xmlns:tabView="clr-namespace:Syncfusion.Maui.TabView;assembly=Syncfusion.Maui.TabView"
+    xmlns:shimmer="clr-namespace:Syncfusion.Maui.Shimmer;assembly=Syncfusion.Maui.Core"
+    Title="{Binding Title}"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="{AppThemeBinding Light=#F5F7FA, Dark=#0F172A}">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- Gradient Header -->
+        <Grid Grid.Row="0">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#F59E0B" Offset="0" />
+                    <GradientStop Color="#D97706" Offset="1" />
+                </LinearGradientBrush>
+            </Grid.Background>
+            <Grid Padding="8,48,16,20" ColumnDefinitions="Auto,Auto,*">
+                <Button Grid.Column="0" Text="←" TextColor="White" BackgroundColor="Transparent"
+                    FontSize="22" WidthRequest="44" HeightRequest="44"
+                    Command="{Binding GoBackCommand}" />
+                <Label Grid.Column="1" Text="🎂" FontSize="28" VerticalOptions="Center" Margin="4,0,8,0" />
+                <VerticalStackLayout Grid.Column="2" VerticalOptions="Center" Spacing="2">
+                    <Label Text="Age Calculator" FontSize="20" FontAttributes="Bold" TextColor="White" />
+                    <Label Text="Find your exact age" FontSize="12" TextColor="#FFFFFFCC" />
+                </VerticalStackLayout>
+            </Grid>
+        </Grid>
+
+        <tabView:SfTabView
+            Grid.Row="1"
+            TabWidthMode="SizeToContent"
+            TabBarBackground="{AppThemeBinding Light=White, Dark=#1E293B}"
+            IndicatorBackground="#F59E0B">
+
+        <tabView:SfTabItem Header="Calculator">
+            <shimmer:SfShimmer IsActive="{Binding IsLoading}" Type="Article">
+                <ScrollView>
+                    <VerticalStackLayout Padding="16" Spacing="16">
+
+                        <!-- Input Card -->
+                        <Border Style="{StaticResource CardStyle}">
+                            <VerticalStackLayout Spacing="14">
+                                <Label Text="Enter Date of Birth" Style="{StaticResource SectionHeaderStyle}" />
+                                <DatePicker
+                                    Date="{Binding DateOfBirth, Mode=TwoWay}"
+                                    MinimumDate="{Binding MinDate}"
+                                    MaximumDate="{Binding MaxDate}"
+                                    Format="dd MMM yyyy"
+                                    FontSize="16"
+                                    TextColor="{AppThemeBinding Light=#1E293B, Dark=#F1F5F9}" />
+                                <Grid ColumnDefinitions="*,*" ColumnSpacing="10" Margin="0,4,0,0">
+                                    <Button Grid.Column="0" Text="Calculate Age" Command="{Binding CalculateCommand}" Style="{StaticResource PrimaryButtonStyle}" />
+                                    <Button Grid.Column="1" Text="Reset" Command="{Binding ResetCommand}" Style="{StaticResource SecondaryButtonStyle}" />
+                                </Grid>
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <!-- Result Card -->
+                        <Border Style="{StaticResource CardStyle}" IsVisible="{Binding HasResult}">
+                            <VerticalStackLayout Spacing="12">
+                                <Label Text="Your Age" Style="{StaticResource SectionHeaderStyle}" />
+                                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                                    <Border Grid.Column="0" Style="{StaticResource StatCardStyle}">
+                                        <VerticalStackLayout HorizontalOptions="Center">
+                                            <Label Text="{Binding Years}" FontSize="32" FontAttributes="Bold" TextColor="#F59E0B" HorizontalOptions="Center" />
+                                            <Label Text="Years" FontSize="12" TextColor="{AppThemeBinding Light=#64748B, Dark=#94A3B8}" HorizontalOptions="Center" />
+                                        </VerticalStackLayout>
+                                    </Border>
+                                    <Border Grid.Column="1" Style="{StaticResource StatCardStyle}">
+                                        <VerticalStackLayout HorizontalOptions="Center">
+                                            <Label Text="{Binding Months}" FontSize="32" FontAttributes="Bold" TextColor="#F59E0B" HorizontalOptions="Center" />
+                                            <Label Text="Months" FontSize="12" TextColor="{AppThemeBinding Light=#64748B, Dark=#94A3B8}" HorizontalOptions="Center" />
+                                        </VerticalStackLayout>
+                                    </Border>
+                                    <Border Grid.Column="2" Style="{StaticResource StatCardStyle}">
+                                        <VerticalStackLayout HorizontalOptions="Center">
+                                            <Label Text="{Binding Days}" FontSize="32" FontAttributes="Bold" TextColor="#F59E0B" HorizontalOptions="Center" />
+                                            <Label Text="Days" FontSize="12" TextColor="{AppThemeBinding Light=#64748B, Dark=#94A3B8}" HorizontalOptions="Center" />
+                                        </VerticalStackLayout>
+                                    </Border>
+                                </Grid>
+                                <Border Style="{StaticResource StatCardStyle}">
+                                    <VerticalStackLayout HorizontalOptions="Center">
+                                        <Label Text="{Binding TotalDays}" FontSize="28" FontAttributes="Bold" TextColor="#4A6CF7" HorizontalOptions="Center" />
+                                        <Label Text="Total Days Lived" FontSize="12" TextColor="{AppThemeBinding Light=#64748B, Dark=#94A3B8}" HorizontalOptions="Center" />
+                                    </VerticalStackLayout>
+                                </Border>
+                                <Button Text="Save to History" Command="{Binding SaveCommand}" Style="{StaticResource PrimaryButtonStyle}" />
+                            </VerticalStackLayout>
+                        </Border>
+
+                    </VerticalStackLayout>
+                </ScrollView>
+            </shimmer:SfShimmer>
+        </tabView:SfTabItem>
+
+        <tabView:SfTabItem Header="History">
+            <Grid Padding="16">
+                <dataGrid:SfDataGrid
+                    ItemsSource="{Binding History}"
+                    AutoGenerateColumnsMode="None"
+                    ColumnWidthMode="Fill"
+                    GridLinesVisibility="Both"
+                    HeaderRowHeight="44"
+                    RowHeight="52">
+                    <dataGrid:SfDataGrid.Columns>
+                        <dataGrid:DataGridTextColumn HeaderText="Date Checked" MappingName="FormattedDate" Width="160" />
+                        <dataGrid:DataGridTextColumn HeaderText="DOB" MappingName="DobFormatted" Width="120" />
+                        <dataGrid:DataGridTextColumn HeaderText="Age" MappingName="Summary" Width="170" />
+                        <dataGrid:DataGridTemplateColumn HeaderText="" Width="56">
+                            <dataGrid:DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Text="🗑" FontSize="16" BackgroundColor="Transparent"
+                                        Command="{Binding Source={x:Reference ThisPage}, Path=BindingContext.DeleteHistoryCommand}"
+                                        CommandParameter="{Binding .}" />
+                                </DataTemplate>
+                            </dataGrid:DataGridTemplateColumn.CellTemplate>
+                        </dataGrid:DataGridTemplateColumn>
+                    </dataGrid:SfDataGrid.Columns>
+                </dataGrid:SfDataGrid>
+            </Grid>
+        </tabView:SfTabItem>
+
+    </tabView:SfTabView>
+
+    </Grid>
+</ContentPage>

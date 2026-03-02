@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="SmartDailyTools.Views.EmiPage"
+    x:Name="ThisPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:SmartDailyTools.ViewModels"
+    xmlns:inputs="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
+    xmlns:dataGrid="clr-namespace:Syncfusion.Maui.DataGrid;assembly=Syncfusion.Maui.DataGrid"
+    xmlns:charts="clr-namespace:Syncfusion.Maui.Charts;assembly=Syncfusion.Maui.Charts"
+    xmlns:tabView="clr-namespace:Syncfusion.Maui.TabView;assembly=Syncfusion.Maui.TabView"
+    xmlns:shimmer="clr-namespace:Syncfusion.Maui.Shimmer;assembly=Syncfusion.Maui.Core"
+    Title="{Binding Title}"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="{AppThemeBinding Light=#F5F7FA, Dark=#0F172A}">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- Gradient Header -->
+        <Grid Grid.Row="0">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#10B981" Offset="0" />
+                    <GradientStop Color="#059669" Offset="1" />
+                </LinearGradientBrush>
+            </Grid.Background>
+            <Grid Padding="8,48,16,20" ColumnDefinitions="Auto,Auto,*">
+                <Button Grid.Column="0" Text="←" TextColor="White" BackgroundColor="Transparent"
+                    FontSize="22" WidthRequest="44" HeightRequest="44"
+                    Command="{Binding GoBackCommand}" />
+                <Label Grid.Column="1" Text="🏦" FontSize="28" VerticalOptions="Center" Margin="4,0,8,0" />
+                <VerticalStackLayout Grid.Column="2" VerticalOptions="Center" Spacing="2">
+                    <Label Text="EMI Calculator" FontSize="20" FontAttributes="Bold" TextColor="White" />
+                    <Label Text="Plan your loan EMI" FontSize="12" TextColor="#FFFFFFCC" />
+                </VerticalStackLayout>
+            </Grid>
+        </Grid>
+
+        <tabView:SfTabView
+            Grid.Row="1"
+            TabWidthMode="SizeToContent"
+            TabBarBackground="{AppThemeBinding Light=White, Dark=#1E293B}"
+            IndicatorBackground="#10B981">
+
+        <tabView:SfTabItem Header="Calculator">
+            <shimmer:SfShimmer IsActive="{Binding IsLoading}" Type="Article">
+                <ScrollView>
+                    <VerticalStackLayout Padding="16" Spacing="16">
+
+                        <Border Style="{StaticResource CardStyle}">
+                            <VerticalStackLayout Spacing="14">
+                                <Label Text="Loan Details" Style="{StaticResource SectionHeaderStyle}" />
+
+                                <VerticalStackLayout Spacing="4">
+                                    <Label Text="Loan Amount (₹)" Style="{StaticResource InputLabelStyle}" />
+                                    <inputs:SfNumericEntry Value="{Binding LoanAmount, Mode=TwoWay}" Minimum="1000" Maximum="100000000" Placeholder="0" HeightRequest="48" />
+                                </VerticalStackLayout>
+
+                                <VerticalStackLayout Spacing="4">
+                                    <Label Text="Annual Interest Rate (%)" Style="{StaticResource InputLabelStyle}" />
+                                    <inputs:SfNumericEntry Value="{Binding InterestRate, Mode=TwoWay}" Minimum="0.1" Maximum="50" Placeholder="0.0" HeightRequest="48" />
+                                </VerticalStackLayout>
+
+                                <Grid ColumnDefinitions="*,110" ColumnSpacing="10">
+                                    <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                        <Label Text="Tenure" Style="{StaticResource InputLabelStyle}" />
+                                        <inputs:SfNumericEntry Value="{Binding Tenure, Mode=TwoWay}" Minimum="1" Maximum="600" Placeholder="0" HeightRequest="48" />
+                                    </VerticalStackLayout>
+                                    <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                        <Label Text="Type" Style="{StaticResource InputLabelStyle}" />
+                                        <inputs:SfComboBox ItemsSource="{Binding TenureTypes}" SelectedItem="{Binding SelectedTenureType, Mode=TwoWay}" IsEditable="False" HeightRequest="48" />
+                                    </VerticalStackLayout>
+                                </Grid>
+
+                                <Grid ColumnDefinitions="*,*" ColumnSpacing="10" Margin="0,4,0,0">
+                                    <Button Grid.Column="0" Text="Calculate EMI" Command="{Binding CalculateCommand}" Style="{StaticResource PrimaryButtonStyle}" />
+                                    <Button Grid.Column="1" Text="Reset" Command="{Binding ResetCommand}" Style="{StaticResource SecondaryButtonStyle}" />
+                                </Grid>
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <!-- Result -->
+                        <Border Style="{StaticResource CardStyle}" IsVisible="{Binding HasResult}">
+                            <VerticalStackLayout Spacing="12">
+                                <Label Text="Loan Breakdown" Style="{StaticResource SectionHeaderStyle}" />
+                                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                                    <Border Grid.Column="0" Style="{StaticResource StatCardStyle}">
+                                        <VerticalStackLayout HorizontalOptions="Center">
+                                            <Label Text="{Binding EmiResult}" FontSize="18" FontAttributes="Bold" TextColor="#10B981" HorizontalOptions="Center" />
+                                            <Label Text="Monthly EMI" FontSize="11" TextColor="{AppThemeBinding Light=#64748B, Dark=#94A3B8}" HorizontalOptions="Center" />
+                                        </VerticalStackLayout>
+                                    </Border>
+                                    <Border Grid.Column="1" Style="{StaticResource StatCardStyle}">
+                                        <VerticalStackLayout HorizontalOptions="Center">
+                                            <Label Text="{Binding TotalInterest}" FontSize="18" FontAttributes="Bold" TextColor="#EF4444" HorizontalOptions="Center" />
+                                            <Label Text="Total Interest" FontSize="11" TextColor="{AppThemeBinding Light=#64748B, Dark=#94A3B8}" HorizontalOptions="Center" />
+                                        </VerticalStackLayout>
+                                    </Border>
+                                    <Border Grid.Column="2" Style="{StaticResource StatCardStyle}">
+                                        <VerticalStackLayout HorizontalOptions="Center">
+                                            <Label Text="{Binding TotalPayment}" FontSize="18" FontAttributes="Bold" TextColor="#4A6CF7" HorizontalOptions="Center" />
+                                            <Label Text="Total Payment" FontSize="11" TextColor="{AppThemeBinding Light=#64748B, Dark=#94A3B8}" HorizontalOptions="Center" />
+                                        </VerticalStackLayout>
+                                    </Border>
+                                </Grid>
+
+                                <!-- Amortization Chart -->
+                                <charts:SfCartesianChart HeightRequest="200">
+                                    <charts:SfCartesianChart.Title>
+                                        <Label Text="Principal vs Interest" HorizontalOptions="Center" FontSize="12" TextColor="{AppThemeBinding Light=#64748B, Dark=#94A3B8}" />
+                                    </charts:SfCartesianChart.Title>
+                                    <charts:SfCartesianChart.XAxes>
+                                        <charts:CategoryAxis />
+                                    </charts:SfCartesianChart.XAxes>
+                                    <charts:SfCartesianChart.YAxes>
+                                        <charts:NumericalAxis />
+                                    </charts:SfCartesianChart.YAxes>
+                                    <charts:ColumnSeries
+                                        ItemsSource="{Binding PrincipalVsInterestData}"
+                                        XBindingPath="Label"
+                                        YBindingPath="Value"
+                                        EnableAnimation="True">
+                                        <charts:ColumnSeries.PaletteBrushes>
+                                            <SolidColorBrush Color="#4A6CF7" />
+                                            <SolidColorBrush Color="#EF4444" />
+                                        </charts:ColumnSeries.PaletteBrushes>
+                                    </charts:ColumnSeries>
+                                </charts:SfCartesianChart>
+
+                                <Button Text="Save to History" Command="{Binding SaveCommand}" Style="{StaticResource PrimaryButtonStyle}" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </VerticalStackLayout>
+                </ScrollView>
+            </shimmer:SfShimmer>
+        </tabView:SfTabItem>
+
+        <tabView:SfTabItem Header="History">
+            <Grid Padding="16">
+                <dataGrid:SfDataGrid
+                    ItemsSource="{Binding History}"
+                    AutoGenerateColumnsMode="None"
+                    ColumnWidthMode="Fill"
+                    GridLinesVisibility="Both"
+                    HeaderRowHeight="44"
+                    RowHeight="52">
+                    <dataGrid:SfDataGrid.Columns>
+                        <dataGrid:DataGridTextColumn HeaderText="Date" MappingName="FormattedDate" Width="150" />
+                        <dataGrid:DataGridTextColumn HeaderText="Summary" MappingName="Summary" Width="220" />
+                        <dataGrid:DataGridTemplateColumn HeaderText="" Width="56">
+                            <dataGrid:DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Text="🗑" FontSize="16" BackgroundColor="Transparent"
+                                        Command="{Binding Source={x:Reference ThisPage}, Path=BindingContext.DeleteHistoryCommand}"
+                                        CommandParameter="{Binding .}" />
+                                </DataTemplate>
+                            </dataGrid:DataGridTemplateColumn.CellTemplate>
+                        </dataGrid:DataGridTemplateColumn>
+                    </dataGrid:SfDataGrid.Columns>
+                </dataGrid:SfDataGrid>
+            </Grid>
+        </tabView:SfTabItem>
+
+    </tabView:SfTabView>
+
+    </Grid>
+</ContentPage>

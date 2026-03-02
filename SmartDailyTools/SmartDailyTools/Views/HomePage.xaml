@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="SmartDailyTools.Views.HomePage"
+    x:Name="HomePageRoot"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:SmartDailyTools.ViewModels"
+    xmlns:models="clr-namespace:SmartDailyTools.Models"
+    xmlns:helpers="clr-namespace:SmartDailyTools.Helpers"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="{AppThemeBinding Light=#1E1B4B, Dark=#13141F}">
+
+    <ContentPage.Resources>
+        <helpers:StringToColorConverter x:Key="StringToColor" />
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="0">
+
+            <!-- ── Compact Dark Header ─────────────────────────────────── -->
+            <VerticalStackLayout
+                Padding="20,52,20,20"
+                Spacing="0">
+
+                <!-- Title row -->
+                <Grid ColumnDefinitions="*,Auto">
+                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                        <Label
+                            Text="Smart Daily Tools"
+                            FontSize="26"
+                            FontAttributes="Bold"
+                            TextColor="White" />
+                        <Label
+                            Text="Your All-in-One Calculator Toolkit"
+                            FontSize="13"
+                            TextColor="#9CA3AF" />
+                    </VerticalStackLayout>
+                    <Label
+                        Grid.Column="1"
+                        Text="⋮"
+                        FontSize="26"
+                        TextColor="White"
+                        VerticalOptions="Start"
+                        Padding="4,0">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnMenuTapped" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </Grid>
+
+                <!-- Badge row -->
+                <Border
+                    BackgroundColor="#22FFFFFF"
+                    Padding="12,7"
+                    StrokeThickness="0"
+                    StrokeShape="RoundRectangle 20"
+                    HorizontalOptions="Start"
+                    Margin="0,14,0,0">
+                    <Label
+                        Text="8 powerful tools — always free ✨"
+                        FontSize="12"
+                        TextColor="White" />
+                </Border>
+
+            </VerticalStackLayout>
+
+            <!-- ── Tools Grid ──────────────────────────────────────────── -->
+            <VerticalStackLayout Padding="16,20,16,24" Spacing="12">
+
+                <Label
+                    Text="Your Tools"
+                    FontSize="20"
+                    FontAttributes="Bold"
+                    TextColor="{AppThemeBinding Light=#1E293B, Dark=#F1F5F9}"
+                    Margin="0,0,0,4" />
+
+                <CollectionView
+                    ItemsSource="{Binding Tools}"
+                    SelectionMode="None">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout
+                            Orientation="Vertical"
+                            Span="2"
+                            HorizontalItemSpacing="12"
+                            VerticalItemSpacing="12" />
+                    </CollectionView.ItemsLayout>
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:ToolItem">
+                            <Border
+                                StrokeThickness="0"
+                                StrokeShape="RoundRectangle 18"
+                                HeightRequest="140">
+                                <Border.Shadow>
+                                    <Shadow Brush="#000000" Offset="0,4" Radius="12" Opacity="0.15" />
+                                </Border.Shadow>
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                        <GradientStop
+                                            Color="{Binding GradientStart, Converter={StaticResource StringToColor}}"
+                                            Offset="0" />
+                                        <GradientStop
+                                            Color="{Binding GradientEnd, Converter={StaticResource StringToColor}}"
+                                            Offset="1" />
+                                    </LinearGradientBrush>
+                                </Border.Background>
+
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding Source={x:Reference HomePageRoot}, Path=BindingContext.OpenToolCommand}"
+                                        CommandParameter="{Binding .}" />
+                                </Border.GestureRecognizers>
+
+                                <VerticalStackLayout Padding="16" Spacing="6" VerticalOptions="Center">
+                                    <Label
+                                        Text="{Binding Icon}"
+                                        FontSize="34"
+                                        HorizontalOptions="Start" />
+                                    <Label
+                                        Text="{Binding Title}"
+                                        FontSize="15"
+                                        FontAttributes="Bold"
+                                        TextColor="White"
+                                        LineBreakMode="TailTruncation" />
+                                    <Label
+                                        Text="{Binding Description}"
+                                        FontSize="11"
+                                        TextColor="#FFFFFFBB"
+                                        LineBreakMode="TailTruncation" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

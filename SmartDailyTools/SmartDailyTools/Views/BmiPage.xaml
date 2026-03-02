@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="SmartDailyTools.Views.BmiPage"
+    x:Name="ThisPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:SmartDailyTools.ViewModels"
+    xmlns:models="clr-namespace:SmartDailyTools.Models"
+    xmlns:inputs="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
+    xmlns:dataGrid="clr-namespace:Syncfusion.Maui.DataGrid;assembly=Syncfusion.Maui.DataGrid"
+    xmlns:charts="clr-namespace:Syncfusion.Maui.Charts;assembly=Syncfusion.Maui.Charts"
+    xmlns:tabView="clr-namespace:Syncfusion.Maui.TabView;assembly=Syncfusion.Maui.TabView"
+    xmlns:shimmer="clr-namespace:Syncfusion.Maui.Shimmer;assembly=Syncfusion.Maui.Core"
+    Title="{Binding Title}"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="{AppThemeBinding Light=#F5F7FA, Dark=#0F172A}">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- Gradient Header -->
+        <Grid Grid.Row="0">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#4A6CF7" Offset="0" />
+                    <GradientStop Color="#6A3DE8" Offset="1" />
+                </LinearGradientBrush>
+            </Grid.Background>
+            <Grid Padding="8,48,16,20" ColumnDefinitions="Auto,Auto,*">
+                <Button Grid.Column="0" Text="←" TextColor="White" BackgroundColor="Transparent"
+                    FontSize="22" WidthRequest="44" HeightRequest="44"
+                    Command="{Binding GoBackCommand}" />
+                <Label Grid.Column="1" Text="🏋️" FontSize="28" VerticalOptions="Center" Margin="4,0,8,0" />
+                <VerticalStackLayout Grid.Column="2" VerticalOptions="Center" Spacing="2">
+                    <Label Text="BMI Calculator" FontSize="20" FontAttributes="Bold" TextColor="White" />
+                    <Label Text="Check your Body Mass Index" FontSize="12" TextColor="#FFFFFFCC" />
+                </VerticalStackLayout>
+            </Grid>
+        </Grid>
+
+        <tabView:SfTabView
+            Grid.Row="1"
+            TabWidthMode="SizeToContent"
+            TabBarBackground="{AppThemeBinding Light=White, Dark=#1E293B}"
+            IndicatorBackground="#4A6CF7"
+            IndicatorPlacement="Bottom">
+        <!-- ── Calculator Tab ──────────────────────────────────────── -->
+        <tabView:SfTabItem Header="Calculator">
+            <shimmer:SfShimmer IsActive="{Binding IsLoading}" Type="Article">
+                <ScrollView>
+                    <VerticalStackLayout Padding="16" Spacing="16">
+
+                        <!-- Input Card -->
+                        <Border Style="{StaticResource CardStyle}">
+                            <VerticalStackLayout Spacing="14">
+                                <Label Text="Enter Your Details" Style="{StaticResource SectionHeaderStyle}" />
+
+                                <!-- Weight row -->
+                                <Grid ColumnDefinitions="*,110" ColumnSpacing="10">
+                                    <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                        <Label Text="Weight" Style="{StaticResource InputLabelStyle}" />
+                                        <inputs:SfNumericEntry
+                                            x:Name="WeightEntry"
+                                            Value="{Binding Weight, Mode=TwoWay}"
+                                            Maximum="500"
+                                            Placeholder="0"
+                                            HeightRequest="48"
+                                            ValueChanged="OnWeightChanged" />
+                                    </VerticalStackLayout>
+                                    <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                        <Label Text="Unit" Style="{StaticResource InputLabelStyle}" />
+                                        <inputs:SfComboBox
+                                            ItemsSource="{Binding WeightUnits}"
+                                            SelectedItem="{Binding SelectedWeightUnit, Mode=TwoWay}"
+                                            IsEditable="False"
+                                            HeightRequest="48" />
+                                    </VerticalStackLayout>
+                                </Grid>
+
+                                <!-- Height row -->
+                                <Grid ColumnDefinitions="*,110" ColumnSpacing="10">
+                                    <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                        <Label Text="Height" Style="{StaticResource InputLabelStyle}" />
+                                        <inputs:SfNumericEntry
+                                            x:Name="HeightEntry"
+                                            Value="{Binding Height, Mode=TwoWay}"
+                                            Maximum="300"
+                                            Placeholder="0"
+                                            HeightRequest="48"
+                                            ValueChanged="OnHeightChanged" />
+                                    </VerticalStackLayout>
+                                    <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                        <Label Text="Unit" Style="{StaticResource InputLabelStyle}" />
+                                        <inputs:SfComboBox
+                                            ItemsSource="{Binding HeightUnits}"
+                                            SelectedItem="{Binding SelectedHeightUnit, Mode=TwoWay}"
+                                            IsEditable="False"
+                                            HeightRequest="48" />
+                                    </VerticalStackLayout>
+                                </Grid>
+
+                                <!-- Action buttons -->
+                                <Grid ColumnDefinitions="*,*" ColumnSpacing="10" Margin="0,4,0,0">
+                                    <Button
+                                        Grid.Column="0"
+                                        Text="Calculate"
+                                        Command="{Binding CalculateCommand}"
+                                        Style="{StaticResource PrimaryButtonStyle}" />
+                                    <Button
+                                        Grid.Column="1"
+                                        Text="Reset"
+                                        Command="{Binding ResetCommand}"
+                                        Style="{StaticResource SecondaryButtonStyle}" />
+                                </Grid>
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <!-- Result Card -->
+                        <Border
+                            Style="{StaticResource CardStyle}"
+                            IsVisible="{Binding HasResult}">
+                            <VerticalStackLayout Spacing="8">
+                                <Label Text="Your BMI Result" Style="{StaticResource SectionHeaderStyle}" />
+
+                                <!-- BMI value display -->
+                                <Border
+                                    BackgroundColor="{Binding CategoryColor}"
+                                    StrokeThickness="0"
+                                    StrokeShape="RoundRectangle 12"
+                                    Padding="16,12">
+                                    <Grid ColumnDefinitions="*,*">
+                                        <VerticalStackLayout Grid.Column="0" HorizontalOptions="Center">
+                                            <Label
+                                                Text="{Binding BmiResult}"
+                                                FontSize="40"
+                                                FontAttributes="Bold"
+                                                TextColor="White"
+                                                HorizontalOptions="Center" />
+                                            <Label
+                                                Text="BMI"
+                                                FontSize="12"
+                                                TextColor="#FFFFFFCC"
+                                                HorizontalOptions="Center" />
+                                        </VerticalStackLayout>
+                                        <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center" VerticalOptions="Center">
+                                            <Label
+                                                Text="{Binding BmiCategory}"
+                                                FontSize="18"
+                                                FontAttributes="Bold"
+                                                TextColor="White"
+                                                HorizontalOptions="Center" />
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                </Border>
+
+                                <!-- Circular Chart: BMI category ring -->
+                                <charts:SfCircularChart
+                                    HeightRequest="220"
+                                    Margin="0,8">
+                                    <charts:SfCircularChart.Title>
+                                        <Label
+                                            Text="BMI Range Categories"
+                                            HorizontalOptions="Center"
+                                            FontSize="12"
+                                            TextColor="{AppThemeBinding Light=#64748B, Dark=#94A3B8}" />
+                                    </charts:SfCircularChart.Title>
+                                    <charts:DoughnutSeries
+                                        ItemsSource="{Binding BmiCategoryItems}"
+                                        XBindingPath="Name"
+                                        YBindingPath="Value"
+                                        InnerRadius="0.5"
+                                        EnableAnimation="True"
+                                        EnableTooltip="True"
+                                        ShowDataLabels="False"
+                                        Radius="0.8">
+                                        <charts:DoughnutSeries.PaletteBrushes>
+                                            <SolidColorBrush Color="#3B82F6" />
+                                            <SolidColorBrush Color="#22C55E" />
+                                            <SolidColorBrush Color="#F59E0B" />
+                                            <SolidColorBrush Color="#EF4444" />
+                                        </charts:DoughnutSeries.PaletteBrushes>
+                                    </charts:DoughnutSeries>
+                                </charts:SfCircularChart>
+
+                                <Button
+                                    Text="Save to History"
+                                    Command="{Binding SaveCommand}"
+                                    Style="{StaticResource PrimaryButtonStyle}" />
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <!-- BMI Trend Chart -->
+                        <Border
+                            Style="{StaticResource CardStyle}"
+                            IsVisible="{Binding HasResult}">
+                            <VerticalStackLayout Spacing="8">
+                                <Label Text="BMI Trend" Style="{StaticResource SectionHeaderStyle}" />
+                                <charts:SfCartesianChart HeightRequest="200">
+                                    <charts:SfCartesianChart.XAxes>
+                                        <charts:CategoryAxis LabelPlacement="BetweenTicks" />
+                                    </charts:SfCartesianChart.XAxes>
+                                    <charts:SfCartesianChart.YAxes>
+                                        <charts:NumericalAxis Minimum="10" Maximum="45" />
+                                    </charts:SfCartesianChart.YAxes>
+                                    <charts:LineSeries
+                                        ItemsSource="{Binding ChartData}"
+                                        XBindingPath="Label"
+                                        YBindingPath="Value"
+                                        EnableAnimation="True"
+                                        StrokeWidth="2"
+                                        ShowMarkers="True">
+                                        <charts:LineSeries.MarkerSettings>
+                                            <charts:ChartMarkerSettings
+                                                Type="Circle"
+                                                Fill="#4A6CF7"
+                                                Height="8"
+                                                Width="8" />
+                                        </charts:LineSeries.MarkerSettings>
+                                    </charts:LineSeries>
+                                </charts:SfCartesianChart>
+                            </VerticalStackLayout>
+                        </Border>
+
+                    </VerticalStackLayout>
+                </ScrollView>
+            </shimmer:SfShimmer>
+        </tabView:SfTabItem>
+
+        <!-- ── History Tab ─────────────────────────────────────────── -->
+        <tabView:SfTabItem Header="History">
+            <Grid Padding="16">
+                <dataGrid:SfDataGrid
+                    ItemsSource="{Binding History}"
+                    AutoGenerateColumnsMode="None"
+                    SelectionMode="Single"
+                    ColumnWidthMode="Fill"
+                    GridLinesVisibility="Both"
+                    HeaderRowHeight="44"
+                    RowHeight="52">
+                    <dataGrid:SfDataGrid.Columns>
+                        <dataGrid:DataGridTextColumn
+                            HeaderText="Date"
+                            MappingName="FormattedDate"
+                            Width="160" />
+                        <dataGrid:DataGridTextColumn
+                            HeaderText="BMI"
+                            MappingName="BmiValue"
+                            Width="80" />
+                        <dataGrid:DataGridTextColumn
+                            HeaderText="Category"
+                            MappingName="Category"
+                            Width="130" />
+                        <dataGrid:DataGridTemplateColumn HeaderText="" Width="56">
+                            <dataGrid:DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button
+                                        Text="🗑"
+                                        FontSize="16"
+                                        BackgroundColor="Transparent"
+                                        Command="{Binding Source={x:Reference ThisPage}, Path=BindingContext.DeleteHistoryCommand}"
+                                        CommandParameter="{Binding .}" />
+                                </DataTemplate>
+                            </dataGrid:DataGridTemplateColumn.CellTemplate>
+                        </dataGrid:DataGridTemplateColumn>
+                    </dataGrid:SfDataGrid.Columns>
+                </dataGrid:SfDataGrid>
+            </Grid>
+        </tabView:SfTabItem>
+
+    </tabView:SfTabView>
+
+    </Grid>
+</ContentPage>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="SmartDailyTools.Views.SettingsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Settings"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="{AppThemeBinding Light=#F5F7FA, Dark=#0F172A}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="16,50,16,24" Spacing="16">
+
+            <!-- Title -->
+            <Label
+                Text="Settings"
+                FontSize="26"
+                FontAttributes="Bold"
+                TextColor="{AppThemeBinding Light=#1E293B, Dark=#F1F5F9}"
+                Margin="4,0,0,8" />
+
+            <!-- Appearance -->
+            <Border Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Appearance" Style="{StaticResource SectionHeaderStyle}" />
+                    <Grid ColumnDefinitions="*,Auto" Padding="0,8,0,0">
+                        <VerticalStackLayout Grid.Column="0" Spacing="2">
+                            <Label Text="Dark Mode" FontSize="15"
+                                TextColor="{AppThemeBinding Light=#1E293B, Dark=#F1F5F9}" />
+                            <Label Text="Follow system theme" FontSize="12"
+                                TextColor="{AppThemeBinding Light=#64748B, Dark=#94A3B8}" />
+                        </VerticalStackLayout>
+                        <Switch Grid.Column="1" IsToggled="True" OnColor="#4A6CF7" ThumbColor="White" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- General -->
+            <Border Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="General" Style="{StaticResource SectionHeaderStyle}" />
+                    <Grid ColumnDefinitions="*,Auto" Padding="0,4,0,0">
+                        <VerticalStackLayout Grid.Column="0" Spacing="2">
+                            <Label Text="Clear All History" FontSize="15"
+                                TextColor="{AppThemeBinding Light=#1E293B, Dark=#F1F5F9}" />
+                            <Label Text="Remove all saved calculation records" FontSize="12"
+                                TextColor="{AppThemeBinding Light=#64748B, Dark=#94A3B8}" />
+                        </VerticalStackLayout>
+                        <Button Grid.Column="1" Text="Clear" BackgroundColor="#EF4444"
+                            TextColor="White" CornerRadius="8" HeightRequest="36"
+                            FontSize="13" Padding="12,0" Clicked="OnClearHistoryClicked" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- About -->
+            <Border Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="About" Style="{StaticResource SectionHeaderStyle}" />
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0" Text="Version" FontSize="15"
+                            TextColor="{AppThemeBinding Light=#1E293B, Dark=#F1F5F9}" />
+                        <Label Grid.Column="1" Text="1.0.0" FontSize="15"
+                            TextColor="{AppThemeBinding Light=#64748B, Dark=#94A3B8}" />
+                    </Grid>
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0" Text="Built with .NET MAUI" FontSize="15"
+                            TextColor="{AppThemeBinding Light=#1E293B, Dark=#F1F5F9}" />
+                        <Label Grid.Column="1" Text="❤️" FontSize="15" />
+                    </Grid>
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0" Text="Powered by Syncfusion" FontSize="15"
+                            TextColor="{AppThemeBinding Light=#1E293B, Dark=#F1F5F9}" />
+                        <Label Grid.Column="1" Text="⚡" FontSize="15" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

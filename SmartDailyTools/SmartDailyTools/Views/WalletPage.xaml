@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="SmartDailyTools.Views.WalletPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Wallet"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="{AppThemeBinding Light=#F5F7FA, Dark=#0F172A}">
+
+    <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="16" Padding="32">
+        <Label Text="💳" FontSize="64" HorizontalOptions="Center" />
+        <Label
+            Text="Wallet"
+            FontSize="24"
+            FontAttributes="Bold"
+            HorizontalOptions="Center"
+            TextColor="{AppThemeBinding Light=#1E293B, Dark=#F1F5F9}" />
+        <Label
+            Text="Track your budgets and expenses across all tools in one place. Coming soon!"
+            FontSize="14"
+            HorizontalOptions="Center"
+            HorizontalTextAlignment="Center"
+            TextColor="{AppThemeBinding Light=#64748B, Dark=#94A3B8}" />
+    </VerticalStackLayout>
+
+</ContentPage>
