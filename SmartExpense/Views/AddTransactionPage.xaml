@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:input="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
+             xmlns:pickers="clr-namespace:Syncfusion.Maui.Picker;assembly=Syncfusion.Maui.Picker"
+             x:Class="SmartExpense.Views.AddTransactionPage">
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="{AppThemeBinding Light=#F1EEFF, Dark=#23264A}" Offset="0" />
+                <GradientStop Color="{AppThemeBinding Light=#E4E9FF, Dark=#15172B}" Offset="1" />
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <ScrollView>
+            <VerticalStackLayout Padding="16,16,16,32" Spacing="18">
+
+                <!-- Header -->
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                    <Border HeightRequest="40" WidthRequest="40" StrokeThickness="0" BackgroundColor="#7A59FF" VerticalOptions="Center">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20" />
+                        </Border.StrokeShape>
+                        <Label Text="＋" FontSize="20" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Border>
+                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                        <Label Text="New Transaction" FontSize="20" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light=#23264A, Dark=#F2F5FF}" />
+                        <Label Text="Record your income or expense"
+                               FontSize="12"
+                               TextColor="{AppThemeBinding Light=#6B6E8E, Dark=#9BA0CC}" />
+                    </VerticalStackLayout>
+                </Grid>
+
+                <!-- Type select card -->
+                <Border Padding="6" StrokeThickness="0">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#7A59FF" Offset="0" />
+                            <GradientStop Color="#40A7FF" Offset="1" />
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="22" />
+                    </Border.StrokeShape>
+                    <VerticalStackLayout Spacing="10" Padding="10,8">
+                        <Label Text="Transaction Type" FontSize="13" FontAttributes="Bold"
+                               TextColor="#E8F0FF" HorizontalOptions="Center" />
+                        <Grid ColumnDefinitions="*,Auto,*" ColumnSpacing="10">
+                            <Label Text="↓ Expense" VerticalOptions="Center" FontAttributes="Bold"
+                                   TextColor="#FFB3B8" HorizontalOptions="End" FontSize="15" />
+                            <Switch Grid.Column="1" IsToggled="{Binding IsIncome}" VerticalOptions="Center" />
+                            <Label Grid.Column="2" Text="↑ Income" VerticalOptions="Center" FontAttributes="Bold"
+                                   TextColor="#A8F5D0" FontSize="15" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Amount card -->
+                <Border Padding="20,18" StrokeThickness="0">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                            <GradientStop Color="{AppThemeBinding Light=#FFFFFF, Dark=#20233E}" Offset="0" />
+                            <GradientStop Color="{AppThemeBinding Light=#F8F6FF, Dark=#272A46}" Offset="1" />
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="20" />
+                    </Border.StrokeShape>
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="AMOUNT" FontSize="11" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light=#9B9FC0, Dark=#6B6E8E}" />
+                        <input:SfNumericEntry Value="{Binding Amount}"
+                                              Placeholder="0.00"
+                                              FontSize="32"
+                                              FontAttributes="Bold"
+                                              TextColor="{AppThemeBinding Light=#23264A, Dark=#F2F5FF}"
+                                              PlaceholderColor="{AppThemeBinding Light=#CACAD8, Dark=#5A5D7E}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Details card -->
+                <Border Padding="18" StrokeThickness="0">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                            <GradientStop Color="{AppThemeBinding Light=#FFFFFF, Dark=#20233E}" Offset="0" />
+                            <GradientStop Color="{AppThemeBinding Light=#F8F6FF, Dark=#272A46}" Offset="1" />
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="20" />
+                    </Border.StrokeShape>
+                    <VerticalStackLayout Spacing="18">
+
+                        <!-- Title -->
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="TITLE" FontSize="11" FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light=#9B9FC0, Dark=#6B6E8E}" />
+                            <Entry Placeholder="e.g. Coffee, Salary…"
+                                   Text="{Binding TitleText}"
+                                   FontSize="16"
+                                   BackgroundColor="Transparent"
+                                   TextColor="{AppThemeBinding Light=#23264A, Dark=#F2F5FF}"
+                                   PlaceholderColor="{AppThemeBinding Light=#CACAD8, Dark=#5A5D7E}" />
+                            <BoxView HeightRequest="1" BackgroundColor="{AppThemeBinding Light=#E0E0F0, Dark=#3A3D5E}" />
+                        </VerticalStackLayout>
+
+                        <!-- Category -->
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="CATEGORY" FontSize="11" FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light=#9B9FC0, Dark=#6B6E8E}" />
+                            <Picker Title="Select category"
+                                    ItemsSource="{Binding Categories}"
+                                    ItemDisplayBinding="{Binding Name}"
+                                    SelectedItem="{Binding SelectedCategory}"
+                                    TextColor="{AppThemeBinding Light=#23264A, Dark=#F2F5FF}"
+                                    BackgroundColor="Transparent" />
+                            <BoxView HeightRequest="1" BackgroundColor="{AppThemeBinding Light=#E0E0F0, Dark=#3A3D5E}" />
+                        </VerticalStackLayout>
+
+                        <!-- Date -->
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="DATE" FontSize="11" FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light=#9B9FC0, Dark=#6B6E8E}" />
+                            <pickers:SfDatePicker SelectedDate="{Binding TransactionDate}" />
+                            <BoxView HeightRequest="1" BackgroundColor="{AppThemeBinding Light=#E0E0F0, Dark=#3A3D5E}" />
+                        </VerticalStackLayout>
+
+                        <!-- Notes -->
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="NOTES (OPTIONAL)" FontSize="11" FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light=#9B9FC0, Dark=#6B6E8E}" />
+                            <Editor Placeholder="Add a note…"
+                                    Text="{Binding Notes}"
+                                    AutoSize="TextChanges"
+                                    FontSize="15"
+                                    MinimumHeightRequest="60"
+                                    BackgroundColor="Transparent"
+                                    TextColor="{AppThemeBinding Light=#23264A, Dark=#F2F5FF}"
+                                    PlaceholderColor="{AppThemeBinding Light=#CACAD8, Dark=#5A5D7E}" />
+                        </VerticalStackLayout>
+
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Save button -->
+                <Border Padding="0" StrokeThickness="0" HeightRequest="54">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                            <GradientStop Color="#7A59FF" Offset="0" />
+                            <GradientStop Color="#40A7FF" Offset="1" />
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="27" />
+                    </Border.StrokeShape>
+                    <Button Text="Save Transaction"
+                            Command="{Binding SaveCommand}"
+                            BackgroundColor="Transparent"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            FontSize="16" />
+                </Border>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentView>

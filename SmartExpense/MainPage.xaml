@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:tabView="clr-namespace:Syncfusion.Maui.TabView;assembly=Syncfusion.Maui.TabView"
+             xmlns:views="clr-namespace:SmartExpense.Views"
+             x:Class="SmartExpense.MainPage"
+             Title="SmartExpense">
+
+    <Grid>
+        <tabView:SfTabView x:Name="MainTabView"
+                           TabBarPlacement="Bottom"
+                           EnableSwiping="False">
+            <tabView:SfTabItem Header="Dashboard">
+                <views:DashboardPage />
+            </tabView:SfTabItem>
+
+            <tabView:SfTabItem Header="Add">
+                <views:AddTransactionPage />
+            </tabView:SfTabItem>
+
+            <tabView:SfTabItem Header="Transactions">
+                <views:TransactionsPage />
+            </tabView:SfTabItem>
+
+            <tabView:SfTabItem Header="Reports">
+                <views:ReportsPage />
+            </tabView:SfTabItem>
+
+            <tabView:SfTabItem Header="About">
+                <views:AboutPage />
+            </tabView:SfTabItem>
+        </tabView:SfTabView>
+    </Grid>
+</ContentPage>
