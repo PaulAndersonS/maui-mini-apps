@@ -154,12 +154,13 @@ maui-mini-apps/
 │
 ├── SmartExpense/
 │   ├── SmartExpense.sln
-│   ├── Data/               # SQLite DB context and repositories
-│   ├── Helpers/            # Constants, converters, seed data
-│   ├── Models/             # Transaction, Category, AppUser, …
-│   ├── Services/           # Auth, transaction, report, AI services
-│   ├── ViewModels/         # MVVM view models
-│   └── Views/              # XAML pages (DashboardPage, ReportsPage, …)
+│   └── SmartExpense/
+│       ├── Data/               # SQLite DB context and repositories
+│       ├── Helpers/            # Constants, converters, seed data
+│       ├── Models/             # Transaction, Category, AppUser, …
+│       ├── Services/           # Auth, transaction, report, AI services
+│       ├── ViewModels/         # MVVM view models
+│       └── Views/              # XAML pages (DashboardPage, ReportsPage, …)
 │
 └── WeatherForecast/
     ├── WeatherForecast.sln
