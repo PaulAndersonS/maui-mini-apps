@@ -43,6 +43,27 @@ A full-featured personal finance app for tracking income and expenses.
 
 ---
 
+### 3. Weather Forecast
+
+A beautifully designed weather app with a dark glassmorphism UI, real-time weather data, hourly/daily forecasts, and rich data visualisations.
+
+**Features:**
+- 🌡️ **Today tab** — current conditions with large temperature display, weather emoji, condition badge, feels-like, and daily high/low
+- 📊 **3 stat cards** — humidity, wind speed, and feels-like temperature at a glance
+- 🔍 **City search** — autocomplete search bar to switch locations instantly
+- 📈 **Temperature Trend chart** — spline area chart showing the hourly temperature curve for the day
+- 🕐 **Next Hours list** — horizontal scrollable hourly forecast cards
+- 🌬️ **Atmosphere gauges** — radial gauges for humidity and wind speed
+- 🌤️ **Today's Range** — visual progress bar showing the day's temperature range
+- 📅 **Next 5 Days tab** — weekly column chart overview plus 5-day forecast rows with condition badges
+- 🔄 **Pull-to-refresh** — swipe down to reload weather data
+- ✨ **Loading shimmer** — skeleton shimmer while data is fetching
+- 🌙 **Dark glassmorphism theme** — deep navy gradient background with frosted-glass cards
+
+**Data source:** [Open-Meteo API](https://open-meteo.com/) (no API key required)
+
+---
+
 ## 🛠️ Tech Stack
 
 | Layer | Technology |
@@ -51,7 +72,7 @@ A full-featured personal finance app for tracking income and expenses.
 | UI Controls | Syncfusion MAUI Controls v32.2.5 |
 | MVVM | CommunityToolkit.Mvvm v8.4.0 |
 | Local Database | SQLite (sqlite-net-pcl v1.9.172) |
-| Target Platforms | Android (API 21+), Windows (10.0.17763.0+) |
+| Target Platforms | Android (API 21+), iOS, macOS Catalyst, Windows (10.0.17763.0+) |
 
 ---
 
@@ -90,6 +111,12 @@ public static class AppConstants
 }
 ```
 
+For **WeatherForecast**, register the license key directly in `WeatherForecast/MauiProgram.cs`:
+
+```csharp
+Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("YOUR_LICENSE_KEY_HERE");
+```
+
 ### 3. Open and run a project
 
 **Smart Daily Tools**
@@ -100,6 +127,11 @@ Open: SmartDailyTools/SmartDailyTools.sln
 **Smart Expense Tracker**
 ```
 Open: SmartExpense/SmartExpense.sln
+```
+
+**Weather Forecast**
+```
+Open: WeatherForecast/WeatherForecast.sln
 ```
 
 Select your target device (Android emulator/device or Windows) and press **F5** to build and run.
@@ -120,14 +152,22 @@ maui-mini-apps/
 │       ├── ViewModels/     # MVVM view models
 │       └── Views/          # XAML pages (HomePage, BmiPage, QrPage, …)
 │
-└── SmartExpense/
-    ├── SmartExpense.sln
-    ├── Data/               # SQLite DB context and repositories
-    ├── Helpers/            # Constants, converters, seed data
-    ├── Models/             # Transaction, Category, AppUser, …
-    ├── Services/           # Auth, transaction, report, AI services
-    ├── ViewModels/         # MVVM view models
-    └── Views/              # XAML pages (DashboardPage, ReportsPage, …)
+├── SmartExpense/
+│   ├── SmartExpense.sln
+│   ├── Data/               # SQLite DB context and repositories
+│   ├── Helpers/            # Constants, converters, seed data
+│   ├── Models/             # Transaction, Category, AppUser, …
+│   ├── Services/           # Auth, transaction, report, AI services
+│   ├── ViewModels/         # MVVM view models
+│   └── Views/              # XAML pages (DashboardPage, ReportsPage, …)
+│
+└── WeatherForecast/
+    ├── WeatherForecast.sln
+    └── WeatherForecast/
+        ├── Models/         # API response DTOs, HourlyForecast, DailyForecast
+        ├── Services/       # WeatherService (Open-Meteo HTTP client)
+        ├── ViewModels/     # WeatherViewModel
+        └── Views/          # WeatherDashboardPage
 ```
 
 ---
