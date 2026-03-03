@@ -5,7 +5,7 @@
 Smart Daily Tools is a cross-platform mobile application built with **.NET MAUI** that bundles everyday calculators and utilities into a single, beautifully designed app. It features a modern dark-themed UI, persistent calculation history, and rich data visualizations powered by Syncfusion controls.
 
 <p align="center">
-  <img src="screenshots/home.png" alt="Home Screen" width="300" />
+  <img src="screenshots/Calculator.png" alt="Home Screen" width="300" />
 </p>
 
 ---
