@@ -5,7 +5,7 @@ A beautifully designed .NET MAUI weather app with a dark glassmorphism UI, real-
 ## Screenshot
 
 <p align="center">
-  <img src="screenshots/screenshot.png" alt="WeatherForecast App" width="320" />
+  <img src="screenshots/weatherforcast.png" alt="WeatherForecast App" width="320" />
 </p>
 
 ## Features
